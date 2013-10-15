@@ -10,6 +10,12 @@ namespace Pong
     {
         GraphicsDeviceManager _graphics;
         SpriteBatch _spriteBatch;
+        public static int ScreenWidth;
+        public static int ScreenHeight;
+        const int PADDLEOFFSET = 70;
+        Player player1;
+        Player player2;
+        Ball ball;
 
         public Game1()
         {
@@ -25,7 +31,12 @@ namespace Pong
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            ScreenWidth = GraphicsDevice.Viewport.Width;
+            ScreenHeight = GraphicsDevice.Viewport.Height;
+
+            player1 = new Player();
+            player2 = new Player();
+            ball = new Ball();
 
             base.Initialize();
         }
@@ -39,7 +50,15 @@ namespace Pong
             // Create a new SpriteBatch, which can be used to draw textures.
             _spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            // TODO: use this.Content to load your game content here
+            player1.Texture = Content.Load<Texture2D>("Paddle");
+            player2.Texture = Content.Load<Texture2D>("Paddle");
+ 
+            player1.Position = new Vector2(PADDLEOFFSET, ScreenHeight / 2 - player1.Texture.Height / 2);
+            player2.Position = new Vector2(ScreenWidth - player2.Texture.Width - PADDLEOFFSET, ScreenHeight / 2 - player2.Texture.Height / 2);
+
+            ball.Texture = Content.Load<Texture2D>("Ball");
+            ball.Position = new Vector2(ScreenWidth / 2 - ball.Texture.Width / 2, ScreenHeight / 2 - ball.Texture.Height / 2);
+
         }
 
         /// <summary>
@@ -58,7 +77,8 @@ namespace Pong
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            // TODO: Add your update logic here
+            ScreenWidth = GraphicsDevice.Viewport.Width;
+            ScreenHeight = GraphicsDevice.Viewport.Height;
 
             base.Update(gameTime);
         }
@@ -69,9 +89,13 @@ namespace Pong
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
-            // TODO: Add your drawing code here
+            _spriteBatch.Begin();
+            player1.Draw(_spriteBatch);
+            player2.Draw(_spriteBatch);
+            ball.Draw(_spriteBatch);
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }

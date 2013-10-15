@@ -127,6 +127,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Ball.cs" />
+    <Compile Include="Classes\GameObject.cs" />
+    <Compile Include="Classes\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -138,9 +141,15 @@
     <None Include="Pong_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\Ball.png" />
+    <Content Include="Content\BallWallCollision.wav" />
     <Content Include="Assets\Logo.png" />
+    <Content Include="Content\Middle.png" />
+    <Content Include="Content\Paddle.png" />
+    <Content Include="Content\PaddleBallCollision.wav" />
     <Content Include="Assets\SmallLogo.png" />
     <Content Include="Assets\SplashScreen.png" />
+    <Content Include="Content\StartScreen.png" />
     <Content Include="Assets\StoreLogo.png" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '11.0' ">
