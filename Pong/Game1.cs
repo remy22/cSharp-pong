@@ -1,5 +1,7 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input.Touch;
 
 namespace Pong
 {
@@ -13,6 +15,8 @@ namespace Pong
         public static int ScreenWidth;
         public static int ScreenHeight;
         const int PADDLEOFFSET = 70;
+        const float BALL_START_SPEED = 8f;
+        const float KEYBOARD_PADDLE_SPEED = 10f;
         Player player1;
         Player player2;
         Ball ball;
@@ -21,6 +25,7 @@ namespace Pong
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            TouchPanel.EnabledGestures = GestureType.FreeDrag;
         }
 
         /// <summary>
@@ -57,7 +62,7 @@ namespace Pong
             player2.Position = new Vector2(ScreenWidth - player2.Texture.Width - PADDLEOFFSET, ScreenHeight / 2 - player2.Texture.Height / 2);
 
             ball.Texture = Content.Load<Texture2D>("Ball");
-            ball.Position = new Vector2(ScreenWidth / 2 - ball.Texture.Width / 2, ScreenHeight / 2 - ball.Texture.Height / 2);
+            ball.Launch(BALL_START_SPEED);
 
         }
 
@@ -79,6 +84,37 @@ namespace Pong
         {
             ScreenWidth = GraphicsDevice.Viewport.Width;
             ScreenHeight = GraphicsDevice.Viewport.Height;
+            ball.Move(ball.Velocity);
+
+            Vector2 player1Velocity = Input.GetKeyboardInputDirection(PlayerIndex.One) * KEYBOARD_PADDLE_SPEED;
+            Vector2 player2Velocity = Input.GetKeyboardInputDirection(PlayerIndex.Two) * KEYBOARD_PADDLE_SPEED;
+            player1.Move(player1Velocity);
+            player2.Move(player2Velocity);
+
+            Vector2 player1TouchVelocity, player2TouchVelocity;
+            Input.ProcessTouchInput(out player1TouchVelocity, out player2TouchVelocity);
+            player1.Move(player1TouchVelocity);
+            player2.Move(player2TouchVelocity);
+
+            if (GameObject.CheckCollision(player1, ball))
+            {
+                ball.Velocity.X = Math.Abs(ball.Velocity.X);
+            }
+
+            if (GameObject.CheckCollision(player2, ball))
+            {
+                ball.Velocity.X = -Math.Abs(ball.Velocity.X);
+            }
+
+            if (ball.Position.X + ball.Texture.Width < 0)
+            {
+                ball.Launch(BALL_START_SPEED);
+            }
+ 
+            if (ball.Position.X > ScreenWidth)
+            {
+                ball.Launch(BALL_START_SPEED);
+            }
 
             base.Update(gameTime);
         }
